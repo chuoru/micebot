@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  ros-master:
+    image: ros:noetic-ros-core
+    container_name: ros-master
+    command: stdbuf -o L roscore
+    network_mode: host
+    
+  micebot:
+    user: root
+    depends_on: 
+      - ros-master
+    image: micebot:noetic
+    build:
+      context: ..
+      dockerfile: ./micebot_dockerfiles/Dockerfile
+    container_name: micebot
+    volumes:
+      - "../:/root/catkin_ws/src/"
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "/tmp/.docker.xauth:/tmp/.docker.xauth"
+      - "/dev:/dev"
+    environment:
+      - "DISPLAY=$DISPLAY"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      - "QT_X11_NO_MITSHM=1"
+    privileged: True
+    network_mode: host
+    tty: True
+    stdin_open: True
+    entrypoint:
+      - bash 
+      - -c
+    command: > 
+      "source /opt/ros/noetic/setup.bash &&
+      source /root/catkin_ws/devel/setup.bash &&
+      sleep 2 &&
+      roslaunch micebot_launch navigation.launch"
