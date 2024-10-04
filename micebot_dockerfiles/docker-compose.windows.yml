@@ -18,6 +18,8 @@ services:
     container_name: micebot
     volumes:
       - "../:/root/catkin_ws/src/"
+    environment:
+      - "GAZEBO_MODEL_PATH=/root/catkin_ws/src/micebot_launch/models/:$GAZEBO_MODEL_PATH"
     privileged: True
     network_mode: host
     tty: True
