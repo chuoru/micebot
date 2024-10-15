@@ -31,3 +31,13 @@ WORKDIR /root/catkin_ws
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 RUN echo "export ROS_MASTER_URI=http://localhost:11311" >> /root/.bashrc
 RUN echo "source /root/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+# install ros dependencies
+WORKDIR /root/catkin_ws 
+
+# Build ROS packages
+RUN catkin config --skiplist micebot_driver
+
+RUN . /opt/ros/noetic/setup.bash && \
+    catkin build && \
+    echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc
