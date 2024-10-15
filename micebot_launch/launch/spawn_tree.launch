@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="config" default="$(find aist_planner)/config/spawner_$(arg robot_type).yaml" />
+
+    <node name="aist_spawner" pkg="aist_planner" type="aist_spawner_node" output="screen">
+        <param name="config" value="$(arg config_path)"/>
+    </node>
+</launch>
